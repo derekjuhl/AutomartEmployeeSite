@@ -1,0 +1,183 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="AutomartModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="AutomartModelStoreContainer">
+          <EntitySet Name="vw_Services" EntityType="AutomartModel.Store.vw_Services" store:Type="Views" store:Schema="Employee" store:Name="vw_Services">
+            <DefiningQuery>SELECT 
+      [vw_Services].[ServiceName] AS [ServiceName], 
+      [vw_Services].[AutoServiceID] AS [AutoServiceID]
+      FROM [Employee].[vw_Services] AS [vw_Services]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+        <!--Errors Found During Generation:
+      warning 6002: The table/view 'Automart.Employee.vw_Services' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.
+      -->
+        <EntityType Name="vw_Services">
+          <Key>
+            <PropertyRef Name="ServiceName" />
+            <PropertyRef Name="AutoServiceID" />
+          </Key>
+          <Property Name="ServiceName" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="AutoServiceID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <Function Name="usp_AddNewVehicle" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="Employee">
+          <Parameter Name="lastname" Type="nvarchar" Mode="In" />
+          <Parameter Name="FirstName" Type="nvarchar" Mode="In" />
+          <Parameter Name="License" Type="nvarchar" Mode="In" />
+          <Parameter Name="VehicleMake" Type="nvarchar" Mode="In" />
+          <Parameter Name="vehicleYear" Type="nchar" Mode="In" />
+        </Function>
+        <Function Name="usp_AddServiceDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="Employee">
+          <Parameter Name="AutoServiceID" Type="int" Mode="In" />
+          <Parameter Name="DiscountPercent" Type="decimal" Mode="In" />
+          <Parameter Name="ServiceNotes" Type="xml" Mode="In" />
+        </Function>
+        <Function Name="usp_AddVehicleService" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="Employee">
+          <Parameter Name="vehicleID" Type="int" Mode="In" />
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_GetVehicleandCustomerInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="Employee">
+          <Parameter Name="License" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="usp_ServiceDetails" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="Employee">
+          <Parameter Name="VehicleServiceID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_Services" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="Employee">
+          <Parameter Name="VehicleID" Type="int" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AutomartModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="AutomartEntities" p1:LazyLoadingEnabled="true" >
+          <FunctionImport Name="usp_AddNewVehicle">
+            <Parameter Name="lastname" Mode="In" Type="String" />
+            <Parameter Name="FirstName" Mode="In" Type="String" />
+            <Parameter Name="License" Mode="In" Type="String" />
+            <Parameter Name="VehicleMake" Mode="In" Type="String" />
+            <Parameter Name="vehicleYear" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_AddServiceDetails">
+            <Parameter Name="AutoServiceID" Mode="In" Type="Int32" />
+            <Parameter Name="DiscountPercent" Mode="In" Type="Decimal" />
+            <Parameter Name="ServiceNotes" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_AddVehicleService">
+            <Parameter Name="vehicleID" Mode="In" Type="Int32" />
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_GetVehicleandCustomerInfo" ReturnType="Collection(AutomartModel.usp_GetVehicleandCustomerInfo_Result)">
+          <Parameter Name="License" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="usp_ServiceDetails" ReturnType="Collection(AutomartModel.usp_ServiceDetails_Result)">
+          <Parameter Name="VehicleServiceID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_Services" ReturnType="Collection(AutomartModel.usp_Services_Result)">
+          <Parameter Name="VehicleID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="vw_Services" EntityType="AutomartModel.vw_Services" />
+        </EntityContainer>
+        <ComplexType Name="usp_GetVehicleandCustomerInfo_Result">
+          <Property Type="String" Name="LastName" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="Firstname" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="VehicleID" Nullable="false" />
+          <Property Type="String" Name="LicenseNumber" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="vehicleMake" Nullable="false" MaxLength="255" />
+          <Property Type="String" Name="VehicleYear" Nullable="false" MaxLength="4" />
+        </ComplexType>
+        <ComplexType Name="usp_ServiceDetails_Result">
+          <Property Type="String" Name="ServiceName" Nullable="false" MaxLength="255" />
+          <Property Type="Decimal" Name="DiscountPercent" Nullable="true" Precision="3" Scale="2" />
+          <Property Type="Decimal" Name="TaxPercent" Nullable="true" Precision="4" Scale="3" />
+          <Property Type="String" Name="ServiceNotes" Nullable="true" MaxLength="Max" />
+        </ComplexType>
+        <ComplexType Name="usp_Services_Result">
+          <Property Type="Int32" Name="VehicleServiceID" Nullable="false" />
+          <Property Type="String" Name="LocationName" Nullable="false" MaxLength="255" />
+          <Property Type="DateTime" Name="ServiceDate" Nullable="false" />
+          <Property Type="Time" Name="ServiceTime" Nullable="false" />
+        </ComplexType>
+        <EntityType Name="vw_Services">
+          <Key>
+            <PropertyRef Name="ServiceName" />
+            <PropertyRef Name="AutoServiceID" />
+          </Key>
+          <Property Type="String" Name="ServiceName" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="AutoServiceID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AutomartModelStoreContainer" CdmEntityContainer="AutomartEntities" >
+          <FunctionImportMapping FunctionImportName="usp_AddNewVehicle" FunctionName="AutomartModel.Store.usp_AddNewVehicle" />
+          <FunctionImportMapping FunctionImportName="usp_AddServiceDetails" FunctionName="AutomartModel.Store.usp_AddServiceDetails" />
+          <FunctionImportMapping FunctionImportName="usp_AddVehicleService" FunctionName="AutomartModel.Store.usp_AddVehicleService" />
+          <FunctionImportMapping FunctionImportName="usp_GetVehicleandCustomerInfo" FunctionName="AutomartModel.Store.usp_GetVehicleandCustomerInfo">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AutomartModel.usp_GetVehicleandCustomerInfo_Result">
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Firstname" ColumnName="Firstname" />
+                <ScalarProperty Name="VehicleID" ColumnName="VehicleID" />
+                <ScalarProperty Name="LicenseNumber" ColumnName="LicenseNumber" />
+                <ScalarProperty Name="vehicleMake" ColumnName="vehicleMake" />
+                <ScalarProperty Name="VehicleYear" ColumnName="VehicleYear" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_ServiceDetails" FunctionName="AutomartModel.Store.usp_ServiceDetails">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AutomartModel.usp_ServiceDetails_Result">
+                <ScalarProperty Name="ServiceName" ColumnName="ServiceName" />
+                <ScalarProperty Name="DiscountPercent" ColumnName="DiscountPercent" />
+                <ScalarProperty Name="TaxPercent" ColumnName="TaxPercent" />
+                <ScalarProperty Name="ServiceNotes" ColumnName="ServiceNotes" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="usp_Services" FunctionName="AutomartModel.Store.usp_Services">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AutomartModel.usp_Services_Result">
+                <ScalarProperty Name="VehicleServiceID" ColumnName="VehicleServiceID" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="ServiceDate" ColumnName="ServiceDate" />
+                <ScalarProperty Name="ServiceTime" ColumnName="ServiceTime" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="vw_Services">
+            <EntityTypeMapping TypeName="AutomartModel.vw_Services">
+              <MappingFragment StoreEntitySet="vw_Services">
+                <ScalarProperty Name="AutoServiceID" ColumnName="AutoServiceID" />
+                <ScalarProperty Name="ServiceName" ColumnName="ServiceName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
